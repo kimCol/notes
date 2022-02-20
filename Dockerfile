@@ -18,6 +18,3 @@ EXPOSE 5000
 ENTRYPOINT [ "FLASK_APP=__init__.py", "flask", "run" ]
 
 
-
-
-
