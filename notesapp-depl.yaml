@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notesapp
+  labels:
+    name: notesapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notesapp
+  template:
+    metadata:
+      labels:
+        app: notesapp
+    spec:
+      containers:
+      - name: notesapp
+        image: collow1998/notesapp:latest
+        env:
+        - name: FLASK_ENV
+          value: "development"
+        - name: APP_SETTINGS
+          value: "project.config.DevelopmentConfig"
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: user
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-credentials
+              key: password
+      restartPolicy: Always

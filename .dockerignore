@@ -1,0 +1,16 @@
+# Metadata
+
+.git
+.gitignore
+.pyc
+.md
+.cache/
+*.md
+!README*.md
+README-secret.md
+/static/.gitkeep
+/templates/.gitkeep
+
+__pycache__/
+.vscode/
+.idea/
