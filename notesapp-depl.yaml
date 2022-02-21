@@ -4,6 +4,7 @@ metadata:
   name: notesapp
   labels:
     name: notesapp
+    app: notesapp
 spec:
   replicas: 1
   selector:
@@ -14,9 +15,16 @@ spec:
       labels:
         app: notesapp
     spec:
+      volumes:
+      - name: notesapp-volume
+        persistentVolumeClaim:
+          claimName: postgres-pvc
       containers:
       - name: notesapp
         image: collow1998/notesapp:latest
+        volumeMounts:
+          - mountPath: "/var/lib/postgresql/data"
+            name: notesapp-volume
         env:
         - name: FLASK_ENV
           value: "development"
@@ -32,4 +40,14 @@ spec:
             secretKeyRef:
               name: postgres-credentials
               key: password
-      restartPolicy: Always
+        readinessProbe:
+          tcpSocket:
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 5000
+          initialDelaySeconds: 15
+          periodSeconds: 20  
+          restartPolicy: Always
